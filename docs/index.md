@@ -106,6 +106,7 @@ date: 2024-11-01 10:20:30
     有人说：种一颗树，最好的时间是十年前，其次是现在... -->
 
 === "2024"
+    - 11/03 [Python中的那些编码规范](./pynotes/02.py_coding_standards.md)
     - 11/01 [Hello Python](./pynotes/01.hello_python.md)
     
 

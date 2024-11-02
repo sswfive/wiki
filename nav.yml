@@ -5,6 +5,7 @@ nav:
 
   - 捕蛇者说:
     - pynotes/01.hello_python.md
+    - pynotes/02.py_coding_standards.md
 
   - 综合笔记:
     - index.md
