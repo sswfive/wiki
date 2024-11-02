@@ -1,6 +1,6 @@
 INHERIT: ./nav.yml
 
-site_name: AstonWang's Blog
+site_name: IceCoffee&空谷幽兰
 site_url: https://sswfive.github.io/wiki/
 site_author: AstonWang
 
@@ -52,7 +52,6 @@ theme:
       toggle:
         icon: material/toggle-switch-off-outline
         name: 切换至日间模式
-
 
 plugins:
   - search

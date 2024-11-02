@@ -1,5 +1,18 @@
 nav:
-  - HelloWorld: 
+  - Hello101: 
+    - index.md
+    - 个人主页: about/profile.md
+
+  - 捕蛇者说:
+    - index.md
+
+  - 综合笔记:
+    - index.md
+  
+  - 常用工具:
+    - index.md
+
+  - 甄选资源:
     - index.md
   
   - 标签分类: 
