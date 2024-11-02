@@ -41,12 +41,12 @@
   <details id={{ tag }}>
     <summary>
       {{- tag }} ({{- ps|count -}})
-      <a class="headerlink" href="/bloghub/#{{ tag }}">¶</a>
+      <a class="headerlink" href="/wiki/#{{ tag }}">¶</a>
     </summary>
     <ol>
       {% for p in ps %}
       <li>
-        <a href="/bloghub/{{ p.url }}">
+        <a href="/wiki/{{ p.url }}">
           {%- if p.meta and p.meta.title -%}
           {{- p.meta.title -}}
           {%- else -%}
