@@ -1,0 +1,56 @@
+{% from "partials/colors.html" import color %}
+
+{% set tags = {} %}
+
+{# 扫描所有页面并收集标签 #}
+{% for p in pages %}
+  {% if p.page.meta.tags %}
+    {% for tag in p.page.meta.tags %}
+      {% if tag not in tags %}
+        {% set _ = tags.update({tag: []}) %}
+      {% endif %}
+      {% set _ = tags[tag].append(p.page) %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
+<style>
+    .tag-cloud {
+        margin-top:0;
+        margin-left: 10em;
+        margin-bottom: 0.5em;
+    }
+    .tag-cloud-content {
+        padding: 0 0.6rem;
+        {% if page.url == 'tags/' %}
+        text-align: center;
+        {% endif %}
+    }
+</style>
+
+<h2 id="tag_cloud">标签云</h2>
+<div class="tag-cloud-content">
+    {% if tags|length %}
+        {% for tag, pages in tags.items() %}
+            {% set size = pages | length %}
+            {% if size > 10 %}
+                {% set size = 10 %}
+            {% endif %}
+            <a class="tag" href="/wiki/tags/#{{ tag }}">
+                <span class="tag-name" style="display:inline-block;
+                    {% if page.url == 'tags/' %}
+                        font-size:{{ 0.8 + size * 0.04 }}rem;
+                    {% else %}
+                        font-size:{{ 0.75 + size * 0.04 }}rem;
+                    {% endif %}
+                    color:{{ color(loop.index % 12) }};
+                ">
+                    {{- tag -}} &nbsp;
+                </span>
+                <!-- Superscript was removed for readability -->
+            </a>
+        {% endfor %}
+    {% else %}
+        <p>No tag found!</p>
+    {% endif %}
+</div>
