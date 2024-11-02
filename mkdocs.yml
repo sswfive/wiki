@@ -15,22 +15,25 @@ theme:
   logo: "assets/head.png"
 
   features:
-    - navigation.instant
-    - navigation.tracking  # 地址栏中的 URL 将自动更新为在目录中突出显示的活动锚点
-    - navigation.tabs  # 顶级部分将呈现在上面视口标题下方的菜单层中，但在移动设备上保持原样
+    # - navigation.instant  # 点击内部链接时，不用全部刷新页面
+    - navigation.tracking  # 在url中使用标题定位锚点
+    - navigation.tabs  # 顶部显示导航顶层nav（也就是第一个节点）
+    # - navigation.tabs.sticky # 滚动是隐藏顶部nav，需要配合navigation.tabs使用
     - navigation.top # 返回顶部的按钮 在上滑时出现
     - navigation.footer #页脚将呈现在边栏中，但在移动设备上保持原样
     - navigation.path #激活导航路径后，每个页面的标题上方都会呈现面包屑导航，这可能会让用户在屏幕较小的设备上访问文档时更容易定位
     - search.suggest # 搜索输入一些字母时推荐补全整个单词
     - search.highlight # 搜索出的文章关键词加入高亮
     - search.share #搜索分享按钮
-    - navigation.indexes #启用节索引页后，可以将文档直接附加到节
+    - navigation.indexes # 指定节点index pages ，跟instant不兼容
+    # - navigation.expand # 不折叠左侧nav节点
     - content.tabs.link
     - content.tooltips
     - content.code.copy #代码复制
     - content.action.edit
     - content.action.view
     - content.code.annotate
+    # - toc.integrate # 右侧生成目录
     - toc.follow
 
   palette:
@@ -40,7 +43,7 @@ theme:
         name: 关闭自动模式
     - media: "(prefers-color-scheme: light)"
       scheme: default # 日间模式
-      primary: orange # 上方的
+      primary: deep purple # 上方的
       accent: blue # 链接等可交互元件的高亮色
       toggle:
         icon: material/toggle-switch # 图标
@@ -73,7 +76,7 @@ plugins:
         - tags/index.md
 
 markdown_extensions:
-  - meta
+  - meta  # 设置特定的key-value到markdown文档中，mkdocs再进行对应解析
   - abbr
   - attr_list
   - admonition

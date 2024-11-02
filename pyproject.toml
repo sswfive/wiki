@@ -22,4 +22,4 @@ plugins = [
 distribution = false
 
 [tool.pdm.scripts]
-dev = "mkdocs serve"
+dev = "mkdocs serve -w nav.yml"
