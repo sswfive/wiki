@@ -6,15 +6,26 @@ nav:
   - 捕蛇者说:
     - pynotes/01.hello_python.md
     - pynotes/02.py_coding_standards.md
+    - pynotes/03.pypi_source_usage.md
+    - pynotes/04.env_package_selection.md
 
   - 综合笔记:
-    - index.md
+    - ModelOps:
+      - notehub/modelops/kserve_deploy.md
+    - 云原生技术:
+      - Kubernetes:
+        - notehub/cloud_native/k8s/ktconnect_usage.md
+        - notehub/cloud_native/k8s/helm_usage.md
+        - notehub/cloud_native/k8s/longhorn_deploy.md
+      - Docker:
+        - notehub/cloud_native/docker/docker_image_pull_problem_for_solution.md
   
   - 常用工具:
-    - index.md
+    - Plugins:
+      - toolbox/plugins/chrome_plugins.md
 
-  - 甄选资源:
-    - index.md
+  # - 甄选资源:
+  #   - index.md
   
   - 标签分类: 
     - tags/index.md

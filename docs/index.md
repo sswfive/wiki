@@ -1,6 +1,6 @@
 ---
 title: Welcome Home...
-date: 2024-11-01 10:20:30
+date: 2024-06-28 00:20:30
 
 ---
 
@@ -105,8 +105,16 @@ date: 2024-11-01 10:20:30
 !!! info
     有人说：种一颗树，最好的时间是十年前，其次是现在... -->
 
-=== "2024"
-    - 11/03 [Python中的那些编码规范](./pynotes/02.py_coding_standards.md)
-    - 11/01 [Hello Python](./pynotes/01.hello_python.md)
+=== "2024   &nbsp; &nbsp; &nbsp; (共 10 篇)"
+    - 11/03 [常见的Python版本和包管理工具汇总](./pynotes/04.env_package_selection.md)
+    - 10/24 [常用的Chrome插件](./toolbox/plugins/chrome_plugins.md)
+    - 09/03 [Kserve(模型服务器)的安装部署](./notehub/modelops/kserve_deploy.md)
+    - 08/23 [k8s储存组件Longhorn部署与使用](./notehub/cloud_native/k8s/longhorn_deploy.md)
+    - 08/21 [Docker镜像无法拉取问题的解决方案](./notehub/cloud_native/docker/docker_image_pull_problem_for_solution.md)
+    - 08/18 [k8s包管理工具Helm的使用](./notehub/cloud_native/k8s/helm_usage.md)
+    - 07/17 [k8s开发工具之KtConnect](./notehub/cloud_native/k8s/ktconnect_usage.md)
+    - 06/29 [常用的Pypi源汇总及使用](./pynotes/03.pypi_source_usage.md)
+    - 06/28 [Python中的那些编码规范](./pynotes/02.py_coding_standards.md)
+    - 06/28 [Hello Python](./pynotes/01.hello_python.md)
     
 
