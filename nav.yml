@@ -23,6 +23,7 @@ nav:
   - 常用工具:
     - Plugins:
       - toolbox/plugins/chrome_plugins.md
+      - toolbox/plugins/vscode_plugins.md
 
   # - 甄选资源:
   #   - index.md

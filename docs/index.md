@@ -105,7 +105,8 @@ date: 2024-06-28 00:20:30
 !!! info
     有人说：种一颗树，最好的时间是十年前，其次是现在... -->
 
-=== "2024   &nbsp; &nbsp; &nbsp; (共 10 篇)"
+=== "2024   &nbsp; &nbsp; &nbsp; (共 11 篇)"
+    - 11/03 [常用的vscode插件](./toolbox/plugins/vscode_plugins.md)
     - 11/03 [常见的Python版本和包管理工具汇总](./pynotes/04.env_package_selection.md)
     - 10/24 [常用的Chrome插件](./toolbox/plugins/chrome_plugins.md)
     - 09/03 [Kserve(模型服务器)的安装部署](./notehub/modelops/kserve_deploy.md)
