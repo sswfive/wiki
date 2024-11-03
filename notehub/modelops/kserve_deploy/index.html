@@ -1,0 +1,2160 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="AstonWang">
+      
+      
+        <link rel="canonical" href="https://sswfive.github.io/wiki/notehub/modelops/kserve_deploy/">
+      
+      
+        <link rel="prev" href="../../../pynotes/04.env_package_selection/">
+      
+      
+        <link rel="next" href="../../cloud_native/k8s/ktconnect_usage/">
+      
+      
+      <link rel="icon" href="../../../assets/head.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.43">
+    
+    
+      
+        <title>Kserve(模型服务器)的安装部署 - IceCoffee&空谷幽兰</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+
+      
+    
+<!-- 数学公式格式支持，用html嵌入的方式支持数学公式自动换行，mathjax似乎要支持但是现在还没实现。
+Automatic line breaking has not yet been implemented in MathJax version 3, 
+but is high on our list for inclusion in a future release. -->
+
+
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/customize.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/shubiao.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config",""),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="IceCoffee&amp;空谷幽兰" class="md-header__button md-logo" aria-label="IceCoffee&空谷幽兰" data-md-component="logo">
+      
+  <img src="../../../assets/head.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IceCoffee&空谷幽兰
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Kserve(模型服务器)的安装部署
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="关闭自动模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="关闭自动模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="blue"  aria-label="切换至夜间模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至夜间模式" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="切换至日间模式"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="切换至日间模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="分享" aria-label="分享" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sswfive/wiki" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Wiki
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../.." class="md-tabs__link">
+          
+  
+    
+  
+  Hello101
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../pynotes/01.hello_python/" class="md-tabs__link">
+          
+  
+    
+  
+  捕蛇者说
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+    
+  
+  综合笔记
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../toolbox/plugins/chrome_plugins/" class="md-tabs__link">
+          
+  
+    
+  
+  常用工具
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../tags/" class="md-tabs__link">
+          
+  
+    
+  
+  标签分类
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="IceCoffee&amp;空谷幽兰" class="md-nav__button md-logo" aria-label="IceCoffee&空谷幽兰" data-md-component="logo">
+      
+  <img src="../../../assets/head.png" alt="logo">
+
+    </a>
+    IceCoffee&空谷幽兰
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sswfive/wiki" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Wiki
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../.." class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Hello101
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Hello101
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/profile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人主页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    捕蛇者说
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            捕蛇者说
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pynotes/01.hello_python/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hello Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pynotes/02.py_coding_standards/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python中的那些编码规范
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pynotes/03.pypi_source_usage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常用的Pypi源汇总及使用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pynotes/04.env_package_selection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于Python版本和包管理工具
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    综合笔记
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            综合笔记
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    ModelOps
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            ModelOps
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Kserve(模型服务器)的安装部署
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Kserve(模型服务器)的安装部署
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      前置说明
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      依赖组件
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="依赖组件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ingress-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      ingress-nginx 部署
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#certmanager" class="md-nav__link">
+    <span class="md-ellipsis">
+      CertManager 部署
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kserve" class="md-nav__link">
+    <span class="md-ellipsis">
+      kserve 部署
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="kserve 部署">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    云原生技术
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            云原生技术
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_1" id="__nav_3_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Kubernetes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Kubernetes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cloud_native/k8s/ktconnect_usage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    k8s开发工具之KtConnect
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cloud_native/k8s/helm_usage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    k8s包管理工具Helm的使用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cloud_native/k8s/longhorn_deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    k8s储存组件Longhorn部署使用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_2" id="__nav_3_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Docker
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Docker
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cloud_native/docker/docker_image_pull_problem_for_solution/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker镜像无法拉取问题的解决方案
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    常用工具
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            常用工具
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Plugins
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            Plugins
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../toolbox/plugins/chrome_plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常用的Chrome插件
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tags/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    标签分类
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            标签分类
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      前置说明
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      依赖组件
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="依赖组件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ingress-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      ingress-nginx 部署
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#certmanager" class="md-nav__link">
+    <span class="md-ellipsis">
+      CertManager 部署
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kserve" class="md-nav__link">
+    <span class="md-ellipsis">
+      kserve 部署
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="kserve 部署">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      安装
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+<nav class="md-tags" >
+  
+    
+    
+    
+      <a href="../../../tags/#k8s" class="md-tag">K8S</a>
+    
+  
+    
+    
+    
+      <a href="../../../tags/#modelops" class="md-tag">ModelOps</a>
+    
+  
+</nav>
+
+
+  
+    <a href="https://github.com/sswfive/wiki/edit/master/docs/notehub/modelops/kserve_deploy.md" title="编辑此页" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/sswfive/wiki/raw/master/docs/notehub/modelops/kserve_deploy.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+  <h1>Kserve(模型服务器)的安装部署</h1>
+
+<h2 id="_1">前置说明<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Kserve 有多种安装部署模式，包括 Serverless、ModelMesh 以及 Kubernetes Deployment，下文的安装模型采用的  Kubernetes Deployment 中的 RawDeployment 模式，其他安装详见官方文档，</p>
+<p>官方文档提到安装 Kserve 需要依赖 Istio 和 Cert Manager、由于 Isito 组件比较重且不太了解，考虑到我的目标是为了快速完成 kserve 的部署，所以就使用 Ingress-nginx 来替代了 Istio，效果是一样。另外安装时需要注意版本对应关系</p>
+<table>
+<thead>
+<tr>
+<th>K8s</th>
+<th>v1.29.7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/kserve/kserve/releases/download/v0.10.0/">KServe</a></td>
+<td>v0.13.0</td>
+</tr>
+<tr>
+<td><a href="https://cert-manager.io/docs/">Cert-manager</a></td>
+<td>v1.15.3</td>
+</tr>
+<tr>
+<td><a href="https://kubernetes.github.io/ingress-nginx/deploy/#quick-start">Ingress-nginx</a>（<a href="https://github.com/kubernetes/ingress-nginx#supported-versions-table">与k8s版本对应关系</a>）</td>
+<td>v4.11.2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">依赖组件<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="ingress-nginx">ingress-nginx 部署<a class="headerlink" href="#ingress-nginx" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>该组件采用<a href="https://helm.sh/"> Helm</a> 安装
+</p>
+</blockquote>
+<ul>
+<li><a href="https://kubernetes.github.io/ingress-nginx/deploy/">官方文档</a></li>
+<li>
+<p><a href="https://github.com/kubernetes/ingress-nginx/releases">安装包链接</a></p>
+</li>
+<li>
+<p>如果在外网状态良好时，可以采用在线安装，由于当前是公司内网，所以采用将 helm 安装包下载下来，进行离线安装</p>
+</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># 添加repo</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>ingress-nginx<span class="w"> </span>https://kubernetes.github.io/ingress-nginx
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1"># 下载ingress-nginx.tgz</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>wget<span class="w"> </span>https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.11.2/ingress-nginx-4.11.2.tgz
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c1"># 解压</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a>tar<span class="w"> </span>-zxf<span class="w"> </span>ingress-nginx-4.11.2.tgz
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c1"># 安装</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a>helm<span class="w"> </span>install<span class="w"> </span>ingress-nginx<span class="w"> </span>./ingress-nginx<span class="w"> </span>--namespace<span class="w"> </span>ingress-nginx<span class="w"> </span>--create-namespace
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c1"># 由于ingress-nginx依赖的镜像被墙无法下载，所以需要曲线救国，主要删除value.yaml中的镜像hash,需要在执行节点下载</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a>docker<span class="w"> </span>pull<span class="w"> </span>k8s.kubesre.xyz/ingress-nginx/kube-webhook-certgen:v1.4.3
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a>docker<span class="w"> </span>tag<span class="w"> </span>k8s.kubesre.xyz/ingress-nginx/kube-webhook-certgen:v1.4.3<span class="w"> </span>registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.4.3
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a>docker<span class="w"> </span>pull<span class="w"> </span>k8s.kubesre.xyz/ingress-nginx/controller:v1.11.2
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a>docker<span class="w"> </span>tag<span class="w"> </span>k8s.kubesre.xyz/ingress-nginx/controller:v1.11.2<span class="w"> </span>registry.k8s.io/ingress-nginx/controller:v1.11.2
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>安装成功后满刻看到如下信息</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span>
+<span class="normal"><a href="#__codelineno-1-26">26</a></span>
+<span class="normal"><a href="#__codelineno-1-27">27</a></span>
+<span class="normal"><a href="#__codelineno-1-28">28</a></span>
+<span class="normal"><a href="#__codelineno-1-29">29</a></span>
+<span class="normal"><a href="#__codelineno-1-30">30</a></span>
+<span class="normal"><a href="#__codelineno-1-31">31</a></span>
+<span class="normal"><a href="#__codelineno-1-32">32</a></span>
+<span class="normal"><a href="#__codelineno-1-33">33</a></span>
+<span class="normal"><a href="#__codelineno-1-34">34</a></span>
+<span class="normal"><a href="#__codelineno-1-35">35</a></span>
+<span class="normal"><a href="#__codelineno-1-36">36</a></span>
+<span class="normal"><a href="#__codelineno-1-37">37</a></span>
+<span class="normal"><a href="#__codelineno-1-38">38</a></span>
+<span class="normal"><a href="#__codelineno-1-39">39</a></span>
+<span class="normal"><a href="#__codelineno-1-40">40</a></span>
+<span class="normal"><a href="#__codelineno-1-41">41</a></span>
+<span class="normal"><a href="#__codelineno-1-42">42</a></span>
+<span class="normal"><a href="#__codelineno-1-43">43</a></span>
+<span class="normal"><a href="#__codelineno-1-44">44</a></span>
+<span class="normal"><a href="#__codelineno-1-45">45</a></span>
+<span class="normal"><a href="#__codelineno-1-46">46</a></span>
+<span class="normal"><a href="#__codelineno-1-47">47</a></span>
+<span class="normal"><a href="#__codelineno-1-48">48</a></span>
+<span class="normal"><a href="#__codelineno-1-49">49</a></span>
+<span class="normal"><a href="#__codelineno-1-50">50</a></span>
+<span class="normal"><a href="#__codelineno-1-51">51</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>ingress-nginx<span class="o">]</span><span class="c1"># helm install ingress-nginx ./ingress-nginx --namespace ingress-nginx</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>NAME:<span class="w"> </span>ingress-nginx
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>LAST<span class="w"> </span>DEPLOYED:<span class="w"> </span>Fri<span class="w"> </span>Aug<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="m">19</span>:34:39<span class="w"> </span><span class="m">2024</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a>NAMESPACE:<span class="w"> </span>ingress-nginx
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>STATUS:<span class="w"> </span>deployed
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a>REVISION:<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a>TEST<span class="w"> </span>SUITE:<span class="w"> </span>None
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a>NOTES:
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a>The<span class="w"> </span>ingress-nginx<span class="w"> </span>controller<span class="w"> </span>has<span class="w"> </span>been<span class="w"> </span>installed.
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a>It<span class="w"> </span>may<span class="w"> </span>take<span class="w"> </span>a<span class="w"> </span>few<span class="w"> </span>minutes<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>load<span class="w"> </span>balancer<span class="w"> </span>IP<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>available.
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a>You<span class="w"> </span>can<span class="w"> </span>watch<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>by<span class="w"> </span>running<span class="w"> </span><span class="s1">&#39;kubectl get service --namespace ingress-nginx ingress-nginx-controller --output wide --watch&#39;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a>An<span class="w"> </span>example<span class="w"> </span>Ingress<span class="w"> </span>that<span class="w"> </span>makes<span class="w"> </span>use<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>controller:
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">  </span>apiVersion:<span class="w"> </span>networking.k8s.io/v1
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">  </span>kind:<span class="w"> </span>Ingress
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">  </span>metadata:
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">    </span>name:<span class="w"> </span>example
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">    </span>namespace:<span class="w"> </span>foo
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="w">  </span>spec:
+<a id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="w">    </span>ingressClassName:<span class="w"> </span>nginx
+<a id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="w">    </span>rules:
+<a id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="w">      </span>-<span class="w"> </span>host:<span class="w"> </span>www.example.com
+<a id="__codelineno-1-23" name="__codelineno-1-23"></a><span class="w">        </span>http:
+<a id="__codelineno-1-24" name="__codelineno-1-24"></a><span class="w">          </span>paths:
+<a id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="w">            </span>-<span class="w"> </span>pathType:<span class="w"> </span>Prefix
+<a id="__codelineno-1-26" name="__codelineno-1-26"></a><span class="w">              </span>backend:
+<a id="__codelineno-1-27" name="__codelineno-1-27"></a><span class="w">                </span>service:
+<a id="__codelineno-1-28" name="__codelineno-1-28"></a><span class="w">                  </span>name:<span class="w"> </span>exampleService
+<a id="__codelineno-1-29" name="__codelineno-1-29"></a><span class="w">                  </span>port:
+<a id="__codelineno-1-30" name="__codelineno-1-30"></a><span class="w">                    </span>number:<span class="w"> </span><span class="m">80</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31"></a><span class="w">              </span>path:<span class="w"> </span>/
+<a id="__codelineno-1-32" name="__codelineno-1-32"></a><span class="w">    </span><span class="c1"># This section is only required if TLS is to be enabled for the Ingress</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33"></a><span class="w">    </span>tls:
+<a id="__codelineno-1-34" name="__codelineno-1-34"></a><span class="w">      </span>-<span class="w"> </span>hosts:
+<a id="__codelineno-1-35" name="__codelineno-1-35"></a><span class="w">        </span>-<span class="w"> </span>www.example.com
+<a id="__codelineno-1-36" name="__codelineno-1-36"></a><span class="w">        </span>secretName:<span class="w"> </span>example-tls
+<a id="__codelineno-1-37" name="__codelineno-1-37"></a>
+<a id="__codelineno-1-38" name="__codelineno-1-38"></a>If<span class="w"> </span>TLS<span class="w"> </span>is<span class="w"> </span>enabled<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>Ingress,<span class="w"> </span>a<span class="w"> </span>Secret<span class="w"> </span>containing<span class="w"> </span>the<span class="w"> </span>certificate<span class="w"> </span>and<span class="w"> </span>key<span class="w"> </span>must<span class="w"> </span>also<span class="w"> </span>be<span class="w"> </span>provided:
+<a id="__codelineno-1-39" name="__codelineno-1-39"></a>
+<a id="__codelineno-1-40" name="__codelineno-1-40"></a><span class="w">  </span>apiVersion:<span class="w"> </span>v1
+<a id="__codelineno-1-41" name="__codelineno-1-41"></a><span class="w">  </span>kind:<span class="w"> </span>Secret
+<a id="__codelineno-1-42" name="__codelineno-1-42"></a><span class="w">  </span>metadata:
+<a id="__codelineno-1-43" name="__codelineno-1-43"></a><span class="w">    </span>name:<span class="w"> </span>example-tls
+<a id="__codelineno-1-44" name="__codelineno-1-44"></a><span class="w">    </span>namespace:<span class="w"> </span>foo
+<a id="__codelineno-1-45" name="__codelineno-1-45"></a><span class="w">  </span>data:
+<a id="__codelineno-1-46" name="__codelineno-1-46"></a><span class="w">    </span>tls.crt:<span class="w"> </span>&lt;base64<span class="w"> </span>encoded<span class="w"> </span>cert&gt;
+<a id="__codelineno-1-47" name="__codelineno-1-47"></a><span class="w">    </span>tls.key:<span class="w"> </span>&lt;base64<span class="w"> </span>encoded<span class="w"> </span>key&gt;
+<a id="__codelineno-1-48" name="__codelineno-1-48"></a><span class="w">  </span>type:<span class="w"> </span>kubernetes.io/tls
+<a id="__codelineno-1-49" name="__codelineno-1-49"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>ingress-nginx<span class="o">]</span><span class="c1"># kubectl get service --namespace ingress-nginx ingress-nginx-controller --output wide --watch</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50"></a>NAME<span class="w">                       </span>TYPE<span class="w">           </span>CLUSTER-IP<span class="w">    </span>EXTERNAL-IP<span class="w">   </span>PORT<span class="o">(</span>S<span class="o">)</span><span class="w">                      </span>AGE<span class="w">   </span>SELECTOR
+<a id="__codelineno-1-51" name="__codelineno-1-51"></a>ingress-nginx-controller<span class="w">   </span>LoadBalancer<span class="w">   </span><span class="m">10</span>.96.1.190<span class="w">   </span>&lt;pending&gt;<span class="w">     </span><span class="m">80</span>:32702/TCP,443:32064/TCP<span class="w">   </span>37s<span class="w">   </span>app.kubernetes.io/component<span class="o">=</span>controller,app.kubernetes.io/instance<span class="o">=</span>ingress-nginx,app.kubernetes.io/name<span class="o">=</span>ingress-nginx
+</code></pre></div></td></tr></table></div>
+<h3 id="certmanager">CertManager 部署<a class="headerlink" href="#certmanager" title="Permanent link">&para;</a></h3>
+<p>本组件采用 YAML 方式安装，若使用 Helm 安装，请参考：<a href="https://cert-manager.io/docs/installation/helm/">Link</a></p>
+<ul>
+<li><a href="https://cert-manager.io/docs/installation/kubectl/">文档地址</a></li>
+<li><a href="https://artifacthub.io/packages/helm/cert-manager/cert-manager">下载地址</a></li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span>
+<span class="normal"><a href="#__codelineno-2-6">6</a></span>
+<span class="normal"><a href="#__codelineno-2-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.yaml
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>cert-manager<span class="o">]</span><span class="c1"># kubectl get pods --namespace cert-manager</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>NAME<span class="w">                                       </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>cert-manager-cainjector-5fd6444f95-rbczx<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>80s
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>cert-manager-d894bbbd4-zd8ns<span class="w">               </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>80s
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a>cert-manager-webhook-869674f96f-cgp92<span class="w">      </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>80s
+</code></pre></div></td></tr></table></div>
+<h2 id="kserve">kserve 部署<a class="headerlink" href="#kserve" title="Permanent link">&para;</a></h2>
+<h3 id="_3">安装<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://kserve.github.io/website/latest/">文档地址</a>： 当前最新版本 v0.13.0</li>
+<li><a href="https://kserve.github.io/website/latest/admin/kubernetes_deployment/">安装指南</a></li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/kserve/kserve/releases/download/v0.13.0/kserve.yaml
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/kserve/kserve/releases/download/v0.13.0/kserve-cluster-resources.yaml
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="c1"># 修改 inferenceservice-config 的部署模型为 RawDeployment</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a>kubectl<span class="w"> </span>patch<span class="w"> </span>configmap/inferenceservice-config<span class="w"> </span>-n<span class="w"> </span>kserve<span class="w"> </span>--type<span class="o">=</span>strategic<span class="w"> </span>-p<span class="w"> </span><span class="s1">&#39;{&quot;data&quot;: {&quot;deploy&quot;: &quot;{\&quot;defaultDeploymentMode\&quot;: \&quot;RawDeployment\&quot;}&quot;}}&#39;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="c1"># 将kserve.yaml中ingressClassName的值修改为nginx，默认值为istio</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a>ingress:<span class="w"> </span><span class="p">|</span>-
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="o">{</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="s2">&quot;ingressClassName&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;nginx&quot;</span>,
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="o">}</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="_4">测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<ol>
+<li>新建一个 Namespace</li>
+</ol>
+<blockquote>
+<p>不要放在默认 namespace 下，很重要很关键，
+</p>
+</blockquote>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span><span class="nb">test</span>
+</code></pre></div></td></tr></table></div>
+<ol>
+<li>创建一个 inferenceservice</li>
+</ol>
+<blockquote>
+<p>官方的案例的 yaml 中，并没有指定 namespace，如果执行下列命令就会创建到默认 namespace 下，后续部署模型就会遇到问题，该问题排查了好久。
+</p>
+</blockquote>
+<ul>
+<li>官网示例</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-n<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-f<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="s">apiVersion: &quot;serving.kserve.io/v1beta1&quot;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="s">kind: &quot;InferenceService&quot;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="s">metadata:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="s">  name: &quot;sklearn-iris&quot;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="s">spec:</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="s">  predictor:</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="s">    model:</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="s">      modelFormat:</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="s">        name: sklearn</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="s">      storageUri: &quot;gs://kfserving-examples/models/sklearn/1.0/model&quot;</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="s">EOF</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>对上述内容进行修改。<ul>
+<li>新建 yaml 文件(sklearn-iris-model.yaml)</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1beta1&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;InferenceService&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sklearn-iris-1&quot;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test&quot;</span><span class="w">  </span><span class="c1"># 这个很关键很重要</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">  </span><span class="nt">predictor</span><span class="p">:</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">    </span><span class="nt">model</span><span class="p">:</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">      </span><span class="nt">modelFormat</span><span class="p">:</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sklearn</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w">      </span><span class="nt">storageUri</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://172.16.x.xx:9999/model.joblib&quot;</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>
+<p>由于官方给的示例的模型存储在 gs 上，一般情况下无法直接下载，我个人的解决方法是复制storageUri 的地址（models/sklearn/1.0/model），点开<a href="https://storage.googleapis.com/kfserving-examples/">平台下载链接</a>的后，将路径拼在后面进行下载到本地（需要注意，需要下载该模型前缀下的所有资源，并放到一个文件夹下），然后在上传到部署的环境中。
+  <img alt="" src="../pics/kserve_model_download.png" /></p>
+</li>
+<li>
+<p>在模型文件夹下，启动一个 httpserver</p>
+</li>
+</ul>
+<blockquote>
+<p>该步骤非必须，如果可以直接从 gs 下，则忽略这一步。启动外部服务的目的是能够让 kserve 能够去下载模型
+</p>
+</blockquote>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span>
+<span class="normal"><a href="#__codelineno-7-17">17</a></span>
+<span class="normal"><a href="#__codelineno-7-18">18</a></span>
+<span class="normal"><a href="#__codelineno-7-19">19</a></span>
+<span class="normal"><a href="#__codelineno-7-20">20</a></span>
+<span class="normal"><a href="#__codelineno-7-21">21</a></span>
+<span class="normal"><a href="#__codelineno-7-22">22</a></span>
+<span class="normal"><a href="#__codelineno-7-23">23</a></span>
+<span class="normal"><a href="#__codelineno-7-24">24</a></span>
+<span class="normal"><a href="#__codelineno-7-25">25</a></span>
+<span class="normal"><a href="#__codelineno-7-26">26</a></span>
+<span class="normal"><a href="#__codelineno-7-27">27</a></span>
+<span class="normal"><a href="#__codelineno-7-28">28</a></span>
+<span class="normal"><a href="#__codelineno-7-29">29</a></span>
+<span class="normal"><a href="#__codelineno-7-30">30</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>test-kserve-deploy<span class="o">]</span><span class="c1"># python -m http.server 9999</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a>Serving<span class="w"> </span>HTTP<span class="w"> </span>on<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>port<span class="w"> </span><span class="m">9999</span><span class="w"> </span><span class="o">(</span>http://0.0.0.0:9999/<span class="o">)</span><span class="w"> </span>...
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="m">127</span>.0.0.1<span class="w"> </span>-<span class="w"> </span>-<span class="w"> </span><span class="o">[</span><span class="m">03</span>/Sep/2024<span class="w"> </span><span class="m">12</span>:19:13<span class="o">]</span><span class="w"> </span><span class="s2">&quot;GET / HTTP/1.1&quot;</span><span class="w"> </span><span class="m">200</span><span class="w"> </span>-
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>kserve<span class="o">]</span><span class="c1"># curl 127.0.0.1:9999</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a>&lt;!DOCTYPE<span class="w"> </span>HTML&gt;
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a>&lt;html<span class="w"> </span><span class="nv">lang</span><span class="o">=</span><span class="s2">&quot;en&quot;</span>&gt;
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a>&lt;head&gt;
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a>&lt;meta<span class="w"> </span><span class="nv">charset</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>&gt;
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a>&lt;title&gt;Directory<span class="w"> </span>listing<span class="w"> </span><span class="k">for</span><span class="w"> </span>/&lt;/title&gt;
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a>&lt;/head&gt;
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a>&lt;body&gt;
+<a id="__codelineno-7-13" name="__codelineno-7-13"></a>&lt;h1&gt;Directory<span class="w"> </span>listing<span class="w"> </span><span class="k">for</span><span class="w"> </span>/&lt;/h1&gt;
+<a id="__codelineno-7-14" name="__codelineno-7-14"></a>&lt;hr&gt;
+<a id="__codelineno-7-15" name="__codelineno-7-15"></a>&lt;ul&gt;
+<a id="__codelineno-7-16" name="__codelineno-7-16"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;mlflow-iris.yml&quot;</span>&gt;mlflow-iris.yml&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-17" name="__codelineno-7-17"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;mlflow-wine-model.yaml&quot;</span>&gt;mlflow-wine-model.yaml&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-18" name="__codelineno-7-18"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;mlflow_wine/&quot;</span>&gt;mlflow_wine/&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-19" name="__codelineno-7-19"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;mlflow_wine.zip&quot;</span>&gt;mlflow_wine.zip&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-20" name="__codelineno-7-20"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;my_model/&quot;</span>&gt;my_model/&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-21" name="__codelineno-7-21"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;my_model.zip&quot;</span>&gt;my_model.zip&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-22" name="__codelineno-7-22"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;python_env.yaml&quot;</span>&gt;python_env.yaml&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-23" name="__codelineno-7-23"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;python_model.pkl&quot;</span>&gt;python_model.pkl&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-24" name="__codelineno-7-24"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;sklearn_iris/&quot;</span>&gt;sklearn_iris/&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-25" name="__codelineno-7-25"></a>&lt;li&gt;&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;tmp/&quot;</span>&gt;tmp/&lt;/a&gt;&lt;/li&gt;
+<a id="__codelineno-7-26" name="__codelineno-7-26"></a>&lt;/ul&gt;
+<a id="__codelineno-7-27" name="__codelineno-7-27"></a>&lt;hr&gt;
+<a id="__codelineno-7-28" name="__codelineno-7-28"></a>&lt;/body&gt;
+<a id="__codelineno-7-29" name="__codelineno-7-29"></a>&lt;/html&gt;
+<a id="__codelineno-7-30" name="__codelineno-7-30"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>kserve<span class="o">]</span><span class="c1">#</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>执行 yaml 文件</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># 在此目录下</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>sklearn_iris<span class="o">]</span><span class="c1"># ls</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a>model.joblib<span class="w">  </span>sklearn-iris-model.yaml
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="c1"># 执行命令</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>sklearn-iris-model.yaml
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>查看模型部署状态</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span>
+<span class="normal"><a href="#__codelineno-9-14">14</a></span>
+<span class="normal"><a href="#__codelineno-9-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>sklearn_iris<span class="o">]</span><span class="c1"># kubectl get all -n test</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a>NAME<span class="w">                                            </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a>pod/sklearn-iris-1-predictor-84d48876bb-wvlm7<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>40s
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a>NAME<span class="w">                               </span>TYPE<span class="w">        </span>CLUSTER-IP<span class="w">    </span>EXTERNAL-IP<span class="w">   </span>PORT<span class="o">(</span>S<span class="o">)</span><span class="w">   </span>AGE
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a>service/sklearn-iris-1-predictor<span class="w">   </span>ClusterIP<span class="w">   </span><span class="m">10</span>.96.0.243<span class="w">   </span>&lt;none&gt;<span class="w">        </span><span class="m">80</span>/TCP<span class="w">    </span>40s
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a>NAME<span class="w">                                       </span>READY<span class="w">   </span>UP-TO-DATE<span class="w">   </span>AVAILABLE<span class="w">   </span>AGE
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a>deployment.apps/sklearn-iris-1-predictor<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span><span class="m">1</span><span class="w">            </span><span class="m">1</span><span class="w">           </span>40s
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a>NAME<span class="w">                                                  </span>DESIRED<span class="w">   </span>CURRENT<span class="w">   </span>READY<span class="w">   </span>AGE
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a>replicaset.apps/sklearn-iris-1-predictor-84d48876bb<span class="w">   </span><span class="m">1</span><span class="w">         </span><span class="m">1</span><span class="w">         </span><span class="m">1</span><span class="w">       </span>40s
+<a id="__codelineno-9-13" name="__codelineno-9-13"></a>
+<a id="__codelineno-9-14" name="__codelineno-9-14"></a>NAME<span class="w">                                                           </span>REFERENCE<span class="w">                             </span>TARGETS<span class="w">         </span>MINPODS<span class="w">   </span>MAXPODS<span class="w">   </span>REPLICAS<span class="w">   </span>AGE
+<a id="__codelineno-9-15" name="__codelineno-9-15"></a>horizontalpodautoscaler.autoscaling/sklearn-iris-1-predictor<span class="w">   </span>Deployment/sklearn-iris-1-predictor<span class="w">   </span>&lt;unknown&gt;/80%<span class="w">   </span><span class="m">1</span><span class="w">         </span><span class="m">1</span><span class="w">         </span><span class="m">1</span><span class="w">          </span>40s
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>查看 inferenceservice 状态</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>sklearn_iris<span class="o">]</span><span class="c1"># kubectl get inferenceservice -n test</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a>NAME<span class="w">             </span>URL<span class="w">                                      </span>READY<span class="w">   </span>PREV<span class="w">   </span>LATEST<span class="w">   </span>PREVROLLEDOUTREVISION<span class="w">   </span>LATESTREADYREVISION<span class="w">   </span>AGE
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a>sklearn-iris-1<span class="w">   </span>http://sklearn-iris-1-test.example.com<span class="w">   </span>True<span class="w">                                                                  </span>5m48s
+</code></pre></div></td></tr></table></div>
+<p>使用 ingress 测试</p>
+<ul>
+<li>查看 ingress-nginx 访问地址</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="#__codelineno-11-2">2</a></span>
+<span class="normal"><a href="#__codelineno-11-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span><span class="o">[</span>root@node77<span class="w"> </span>sklearn_iris<span class="o">]</span><span class="c1"># kubectl get svc -n test</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a>NAME<span class="w">                       </span>TYPE<span class="w">        </span>CLUSTER-IP<span class="w">    </span>EXTERNAL-IP<span class="w">   </span>PORT<span class="o">(</span>S<span class="o">)</span><span class="w">   </span>AGE
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a>sklearn-iris-1-predictor<span class="w">   </span>ClusterIP<span class="w">   </span><span class="m">10</span>.96.0.243<span class="w">   </span>&lt;none&gt;<span class="w">        </span><span class="m">80</span>/TCP<span class="w">    </span>7m2s
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>编写输入参数 文件，input.json</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span>
+<span class="normal"><a href="#__codelineno-12-4">4</a></span>
+<span class="normal"><a href="#__codelineno-12-5">5</a></span>
+<span class="normal"><a href="#__codelineno-12-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="w">  </span><span class="nt">&quot;instances&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">    </span><span class="p">[</span><span class="mf">6.8</span><span class="p">,</span><span class="w">  </span><span class="mf">2.8</span><span class="p">,</span><span class="w">  </span><span class="mf">4.8</span><span class="p">,</span><span class="w">  </span><span class="mf">1.4</span><span class="p">],</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">    </span><span class="p">[</span><span class="mf">6.0</span><span class="p">,</span><span class="w">  </span><span class="mf">3.4</span><span class="p">,</span><span class="w">  </span><span class="mf">4.5</span><span class="p">,</span><span class="w">  </span><span class="mf">1.6</span><span class="p">]</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>编写测试脚本</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-13-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-13-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-13-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-13-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-13-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-13-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-13-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-13-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-13-10">10</a></span>
+<span class="normal"><a href="#__codelineno-13-11">11</a></span>
+<span class="normal"><a href="#__codelineno-13-12">12</a></span>
+<span class="normal"><a href="#__codelineno-13-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="c1"># nginx ingress 的访问地址</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="nv">INGRESS_HOST</span><span class="o">=</span><span class="m">10</span>.96.0.243
+<a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="nv">INGRESS_PORT</span><span class="o">=</span><span class="m">80</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="nv">MODEL_NAME</span><span class="o">=</span>sklearn-iris-1
+<a id="__codelineno-13-8" name="__codelineno-13-8"></a><span class="nv">INPUT_PATH</span><span class="o">=</span>@./input.json
+<a id="__codelineno-13-9" name="__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10"></a><span class="nv">SERVICE_HOSTNAME</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>inferenceservice<span class="w"> </span><span class="si">${</span><span class="nv">MODEL_NAME</span><span class="si">}</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.url}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;/&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">3</span><span class="k">)</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11"></a>
+<a id="__codelineno-13-12" name="__codelineno-13-12"></a><span class="c1"># 使用 curl 发起请求</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13"></a>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Host: </span><span class="si">${</span><span class="nv">SERVICE_HOSTNAME</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>http://<span class="si">${</span><span class="nv">INGRESS_HOST</span><span class="si">}</span>:<span class="si">${</span><span class="nv">INGRESS_PORT</span><span class="si">}</span>/v1/models/<span class="nv">$MODEL_NAME</span>:predict<span class="w"> </span>-d<span class="w"> </span><span class="nv">$INPUT_PATH</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>执行测试 <code>sh -x infer_test.sh</code></li>
+<li>测试结果如下图</li>
+</ul>
+<p><img alt="" src="../pics/kserve_test.png" /></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-11-03</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="创建日期">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-11-03</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <!-- Footer -->
+<footer class="md-footer">
+
+  <!-- Link to previous and/or next page -->
+  
+    
+      
+      <nav
+        class="md-footer__inner md-grid"
+        aria-label="页脚"
+        
+      >
+
+        <!-- Link to previous page -->
+        
+          
+          <a
+            href="../../../pynotes/04.env_package_selection/"
+            class="md-footer__link md-footer__link--prev"
+            aria-label="上一页: 关于Python版本和包管理工具"
+          >
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                关于Python版本和包管理工具
+              </div>
+            </div>
+            
+          </a>
+        
+
+        <!-- Link to next page -->
+        
+          
+          <a
+            href="../../cloud_native/k8s/ktconnect_usage/"
+            class="md-footer__link md-footer__link--next"
+            aria-label="下一页: k8s开发工具之KtConnect"
+          >
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                k8s开发工具之KtConnect
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+
+  <!-- Further information -->
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid" style="display: flex; justify-content: center; ">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; @20241101 AstonWang/All Rights Reserved.
+    </div>
+  
+  
+</div>
+
+      <font color="#B9B9B9">
+      <div class="md-footer-meta__inner md-grid" style="display: flex; justify-content: center; "></div>
+        <div id='box11' style="font-size: 14px;"> &nbsp;| &nbsp; 本站已经运行: <span id="timer"></span></div>
+      </font>
+
+    <!-- 本站访问量：<script async src="//finicounter.eu.org/finicounter.js"></script> -->
+    <!-- <span id="finicount_views"></span>    &nbsp;|&nbsp; -->
+    <!-- <footer> -->
+      <!-- <a href="https://icp.gov.moe/?keyword=20230640" target="_blank">萌ICP备20230640号</a> -->
+    <!-- </footer> -->
+  </div>
+      </font>
+   
+    <!-- <font color="#B9B9B9">
+      <div class="footer-visit-count" style="display: flex; justify-content: center; align-items: center;">
+    本站访问量：<script async src="//finicounter.eu.org/finicounter.js"></script>
+    <span id="finicount_views"></span>    &nbsp;|&nbsp;
+    <footer>
+      <a href="https://icp.gov.moe/?keyword=20230640" target="_blank">萌ICP备20230640号</a>
+    </footer>
+  </div>
+      </font> -->
+
+      <style>
+        .footer-visit-count {
+            height: fit-content;
+            min-height: 55px; /* 根据实际情况调整此高度 */
+        }
+        </style>
+      
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+  function timingTime(){
+    let start = '2024-06-28 00:00:00'
+    let startTime = new Date(start).getTime()
+    let currentTime = new Date().getTime()
+    let difference = currentTime - startTime
+    let m =  Math.floor(difference / (1000))
+    let mm = m % 60  // 秒
+    let f = Math.floor(m / 60)
+    let ff = f % 60 // 分钟
+    let s = Math.floor(f/ 60) // 小时
+    let ss = s % 24
+    let day = Math.floor(s  / 24 ) // 天数
+    return day + "天" + ss + "时" + ff + "分" + mm +'秒'
+  }
+  setInterval(()=>{
+    document.getElementById('timer').innerHTML = timingTime()
+  },1000)
+  });
+</script>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.tabs", "navigation.top", "navigation.footer", "navigation.path", "search.suggest", "search.highlight", "search.share", "navigation.indexes", "content.tabs.link", "content.tooltips", "content.code.copy", "content.action.edit", "content.action.view", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="../../../javascripts/extra.js"></script>
+      
+        <script src="../../../javascripts/shubiao.js"></script>
+      
+        <script src="../../../javascripts/shortcuts.js"></script>
+      
+    
+  </body>
+</html>
