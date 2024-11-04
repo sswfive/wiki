@@ -2229,34 +2229,35 @@ but is high on our list for inclusion in a future release. -->
 <a id="__codelineno-8-30" name="__codelineno-8-30"></a><span class="o">---------------------</span>
 </code></pre></div></td></tr></table></div>
 <ul>
-<li>增删查操作分析</li>
-<li><font style="color:rgb(0, 0, 0);">插入</font><ul>
-<li><font style="color:rgb(51, 51, 51);">每次向字典或集合插入一个元素时，Python 会首先计算键的哈希值（hash(key)），再和 mask = PyDicMinSize - 1 做与操作，计算这个元素应该插入哈希表的位置 index = hash(key) &amp; mask。如果哈希表中此位置是空的，那么这个元素就会被插入其中。</font></li>
-<li><font style="color:rgb(51, 51, 51);">而如果此位置已被占用，Python 便会比较两个元素的哈希值和键是否相等。</font></li>
-<li><font style="color:rgb(51, 51, 51);">若两者都相等，则表明这个元素已经存在，如果值不同，则更新值。</font></li>
-<li><font style="color:rgb(51, 51, 51);">若两者中有一个不相等，这种情况我们通常称为哈希冲突（hash collision），意思是两个元素的键不相等，但是哈希值相等。这种情况下，Python 便会继续寻找表中空余的位置，直到找到位置为止。</font></li>
+<li>增删查操作分析<ul>
+<li>插入<ul>
+<li>每次向字典或集合插入一个元素时，Python 会首先计算键的哈希值（hash(key)），再和 mask = PyDicMinSize - 1 做与操作，计算这个元素应该插入哈希表的位置 index = hash(key) &amp; mask。如果哈希表中此位置是空的，那么这个元素就会被插入其中。而如果此位置已被占用，Python 便会比较两个元素的哈希值和键是否相等。</li>
+<li>若两者都相等，则表明这个元素已经存在，如果值不同，则更新值。</li>
+<li>若两者中有一个不相等，这种情况我们通常称为哈希冲突（hash collision），意思是两个元素的键不相等，但是哈希值相等。这种情况下，Python 便会继续寻找表中空余的位置，直到找到位置为止。</li>
 </ul>
 </li>
-<li><font style="color:rgb(51, 51, 51);">查找</font><ul>
-<li><font style="color:rgb(51, 51, 51);">和插入操作类似，先根据哈希值找到其应该处于的为位置，再比较哈希表这个位置中元素的哈希值和键，看是否与需要查找的元素相等。相等直接返回，不相等，继续查找，直到空位或者抛出异常为止</font></li>
+<li>查找<ul>
+<li>和插入操作类似，先根据哈希值找到其应该处于的为位置，再比较哈希表这个位置中元素的哈希值和键，看是否与需要查找的元素相等。相等直接返回，不相等，继续查找，直到空位或者抛出异常为止</li>
 </ul>
 </li>
-<li><font style="color:rgb(0, 0, 0);">删除</font><ul>
-<li><font style="color:rgb(0, 0, 0);">会暂时对这个位置的元素，赋予一个特殊的值，等到重新调整哈希表的大小时，再将其删除。</font></li>
+<li>删除<ul>
+<li>会暂时对这个位置的元素，赋予一个特殊的值，等到重新调整哈希表的大小时，再将其删除。</li>
 </ul>
 </li>
-<li><font style="color:rgb(0, 0, 0);">什么是哈希冲突?</font><ul>
-<li><font style="color:rgb(0, 0, 0);">两个元素的键不相等，但哈希值相等的情况称为hash冲突。</font></li>
-<li><font style="color:rgb(0, 0, 0);">hash冲突的发生， 往往会降低字典或集合操作的速度。为了保证期高效性，字典和集合内的哈希表，通过会抱着闺女其至少留有&#8531;的剩余空间，随着元素的不停插入，当剩余空间小于&#8531;时，python会重新获取更到的内存空间，扩充hash表。</font></li>
+</ul>
+</li>
+<li>什么是哈希冲突?<ul>
+<li>两个元素的键不相等，但哈希值相等的情况称为hash冲突。</li>
+<li>hash冲突的发生， 往往会降低字典或集合操作的速度。为了保证期高效性，字典和集合内的哈希表，通过会抱着闺女其至少留有&#8531;的剩余空间，随着元素的不停插入，当剩余空间小于&#8531;时，python会重新获取更到的内存空间，扩充hash表。</li>
 </ul>
 </li>
 </ul>
 <h4 id="_10">应用场景<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h4>
 <ul>
 <li>Dict：<ul>
-<li><font style="color:rgb(18, 18, 18);">使用 多个键值对，存储 描述一个物体 的相关信息 </font></li>
-<li><font style="color:rgb(18, 18, 18);"> </font><font style="color:rgb(51, 51, 51);">将多个字典放在一个列表中，然后遍历，对循环体中的每个字典都做同样的操作。</font></li>
-<li><font style="color:rgb(51, 51, 51);">高效查询</font></li>
+<li>使用 多个键值对，存储 描述一个物体 的相关信息 </li>
+<li>将多个字典放在一个列表中，然后遍历，对循环体中的每个字典都做同样的操作。</li>
+<li>高效查询</li>
 </ul>
 </li>
 <li>Set:<ul>
@@ -2268,20 +2269,20 @@ but is high on our list for inclusion in a future release. -->
 <h4 id="_11">常用函数<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h4>
 <ul>
 <li>Dict:<ul>
-<li><font style="color:rgb(51, 51, 51);">keys()</font></li>
-<li><font style="color:rgb(51, 51, 51);">values()</font></li>
-<li><font style="color:rgb(51, 51, 51);">items()</font></li>
-<li><font style="color:rgb(51, 51, 51);">del：删除字典或删除字典中指定键值对</font></li>
-<li><font style="color:rgb(51, 51, 51);">clear()：清空字典</font></li>
-<li><font style="color:rgb(51, 51, 51);">for  in 遍历</font></li>
+<li>keys()</li>
+<li>values()</li>
+<li>items()</li>
+<li>del：删除字典或删除字典中指定键值对</li>
+<li>clear()：清空字典</li>
+<li>for  in 遍历</li>
 </ul>
 </li>
 <li>Set:<ul>
-<li><font style="color:rgb(51, 51, 51);">add()</font></li>
-<li><font style="color:rgb(51, 51, 51);">update(), 追加的数据是序列</font></li>
-<li><font style="color:rgb(51, 51, 51);">remove()，删除集合中的指定数据，如果数据不存在则报错</font></li>
-<li><font style="color:rgb(51, 51, 51);">discard()，删除集合中的指定数据，如果数据不存在也不会报错</font></li>
-<li><font style="color:rgb(51, 51, 51);">pop()，随机删除集合中的某个数据，并返回这个数据。</font></li>
+<li>add()</li>
+<li>update(), 追加的数据是序列</li>
+<li>remove()，删除集合中的指定数据，如果数据不存在则报错</li>
+<li>discard()，删除集合中的指定数据，如果数据不存在也不会报错</li>
+<li>pop()，随机删除集合中的某个数据，并返回这个数据。</li>
 </ul>
 </li>
 </ul>
