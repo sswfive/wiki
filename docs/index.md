@@ -105,13 +105,14 @@ date: 2024-06-28 00:20:30
 !!! info
     有人说：种一颗树，最好的时间是十年前，其次是现在... -->
 
-=== "2024   &nbsp; &nbsp; &nbsp; (共 12 篇)"
+=== "2024   &nbsp; &nbsp; &nbsp; (共 13 篇)"
 
     - 11/04 [开发工具的安装指南(整合版)](./toolbox/devbox/common_dev_tools_install.md)
     - 11/03 [常用的vscode插件](./toolbox/plugins/vscode_plugins.md)
     - 11/03 [常见的Python版本和包管理工具汇总](./pynotes/04.env_package_selection.md)
     - 10/24 [常用的Chrome插件](./toolbox/plugins/chrome_plugins.md)
     - 09/03 [Kserve(模型服务器)的安装部署](./notehub/modelops/kserve_deploy.md)
+    - 08/28 [Python中的数据类型用法剖析](./pynotes/05.py_data_struct_summary.md)
     - 08/23 [k8s储存组件Longhorn部署与使用](./notehub/cloud_native/k8s/longhorn_deploy.md)
     - 08/21 [Docker镜像无法拉取问题的解决方案](./notehub/cloud_native/docker/docker_image_pull_problem_for_solution.md)
     - 08/18 [k8s包管理工具Helm的使用](./notehub/cloud_native/k8s/helm_usage.md)
