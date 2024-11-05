@@ -24,6 +24,7 @@ nav:
   - 常用工具:
     - 开发工具库:
       - toolbox/devbox/common_dev_tools_install.md
+      - toolbox/devbox/tools_software_dev_collection.md
     - Plugins:
       - toolbox/plugins/chrome_plugins.md
       - toolbox/plugins/vscode_plugins.md
