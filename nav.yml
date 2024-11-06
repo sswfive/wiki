@@ -4,11 +4,14 @@ nav:
     - 个人主页: about/profile.md
 
   - 捕蛇者说:
-    - pynotes/05.py_data_struct_summary.md
-    - pynotes/04.env_package_selection.md
-    - pynotes/03.pypi_source_usage.md
-    - pynotes/02.py_coding_standards.md
-    - pynotes/01.hello_python.md
+    - 工程实践:
+      - pynotes/05.py_data_struct_summary.md
+      - pynotes/04.env_package_selection.md
+      - pynotes/03.pypi_source_usage.md
+      - pynotes/02.py_coding_standards.md
+      - pynotes/01.hello_python.md
+    - 常用类库:
+      - pynotes/pylibs/pathlib.md
 
   - 综合笔记:
     - ModelOps:
