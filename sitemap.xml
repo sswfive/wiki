@@ -2,70 +2,74 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://sswfive.github.io/wiki/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/about/profile/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/notehub/cloud_native/docker/docker_image_pull_problem_for_solution/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/notehub/cloud_native/k8s/helm_usage/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/notehub/cloud_native/k8s/ktconnect_usage/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/notehub/cloud_native/k8s/longhorn_deploy/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/notehub/modelops/kserve_deploy/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/pynotes/01.hello_python/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/pynotes/02.py_coding_standards/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/pynotes/03.pypi_source_usage/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/pynotes/04.env_package_selection/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/pynotes/05.py_data_struct_summary/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
+    </url>
+    <url>
+         <loc>https://sswfive.github.io/wiki/pynotes/pylibs/pathlib/</loc>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/toolbox/devbox/common_dev_tools_install/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/toolbox/devbox/tools_software_dev_collection/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/toolbox/plugins/chrome_plugins/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/toolbox/plugins/vscode_plugins/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
     <url>
          <loc>https://sswfive.github.io/wiki/tags/</loc>
-         <lastmod>2024-11-05</lastmod>
+         <lastmod>2024-11-06</lastmod>
     </url>
 </urlset>
