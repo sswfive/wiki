@@ -105,7 +105,8 @@ date: 2024-06-28 00:20:30
 !!! info
     有人说：种一颗树，最好的时间是十年前，其次是现在... -->
 
-=== "2024   &nbsp; &nbsp; &nbsp; (共 15 篇)"
+=== "2024   &nbsp; &nbsp; &nbsp; (共 16 篇)"
+    - 11/07 [关于ModelOps的相关技术](./notehub/modelops/modelops_tech.md)
     - 11/06 [pathlib之使用面向对象的方式操作路径](./pynotes/pylibs/pathlib.md)
     - 11/04 [开发工具的安装指南(整合版)](./toolbox/devbox/common_dev_tools_install.md)
     - 11/03 [常用的vscode插件](./toolbox/plugins/vscode_plugins.md)
