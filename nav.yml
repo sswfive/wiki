@@ -18,9 +18,12 @@ nav:
       - notehub/modelops/kserve_deploy.md
     - 云原生技术:
       - Kubernetes:
-        - notehub/cloud_native/k8s/ktconnect_usage.md
-        - notehub/cloud_native/k8s/helm_usage.md
-        - notehub/cloud_native/k8s/longhorn_deploy.md
+        - 实践应用:
+          - notehub/cloud_native/k8s/ktconnect_usage.md
+          - notehub/cloud_native/k8s/helm_usage.md
+          - notehub/cloud_native/k8s/longhorn_deploy.md
+        - 基础知识:
+          - notehub/cloud_native/k8s/ingress.md
       - Docker:
         - notehub/cloud_native/docker/docker_image_pull_problem_for_solution.md
   
