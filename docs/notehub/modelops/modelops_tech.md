@@ -38,7 +38,7 @@ tags:
 + [Github](https://github.com/SeldonIO/seldon-core)
 + 简介：一款<font style="color:rgb(31, 35, 40);">用于打包、部署、监控和管理数千个生产机器学习模型的 MLOps 框架</font>
 
-## Kserve
+### Kserve
 + [官网](https://kserve.github.io/website/latest/)
 + [Github](https://github.com/kserve/kserve)
 + 简介：一款基于 Kubernetes 高度可扩展且基于标准的模型部署与推理平台
