@@ -11,6 +11,7 @@ nav:
       - pynotes/02.py_coding_standards.md
       - pynotes/01.hello_python.md
     - 常用类库:
+      - pynotes/pylibs/awesome_libs.md
       - pynotes/pylibs/pathlib.md
 
   - 综合笔记:
